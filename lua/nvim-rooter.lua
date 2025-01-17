@@ -8,6 +8,11 @@ local _config = {
     ['dashboard'] = true,
     ['TelescopePrompt'] = true,
   },
+  exclude_buftypes = {
+    ['terminal'] = true,
+    ['prompt'] = true,
+    ['quickfix'] = true,
+  },
   fallback_to_parent = false,
 }
 
@@ -39,6 +44,10 @@ local function activate()
   end
 
   if _config.exclude_filetypes[vim.bo.filetype] ~= nil then
+    return false
+  end
+
+  if _config.exclude_buftypes[vim.bo.buftype] ~= nil then
     return false
   end
 
@@ -163,6 +172,7 @@ local function setup(opts)
     or { '.git', '.hg', '.svn' }
   _config.trigger_patterns = opts.trigger_patterns ~= nil and opts.trigger_patterns or { '*' }
   _config.exclude_filetypes = merge(_config.exclude_filetypes, opts.exclude_filetypes)
+  _config.exclude_buftypes = merge(_config.exclude_buftypes, opts.exclude_buftypes)
   _config.fallback_to_parent = opts.fallback_to_parent ~= nil and opts.fallback_to_parent
   _config.cd_scope = opts.cd_scope ~= nil and opts.cd_scope or "global"
 
